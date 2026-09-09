@@ -1,13 +1,15 @@
-.PHONY: test build clean
-
-test:
-	@bash httpstat_test.sh
-
-clean:
-	rm -rf build dist *.egg-info
+.PHONY: test unit e2e build clean
 
 build:
-	uv build
+	go build -o httpstat .
 
-publish: clean build
-	uv publish
+unit:
+	go test -v ./...
+
+e2e: build
+	@bash httpstat_test.sh
+
+test: unit
+
+clean:
+	rm -f httpstat
